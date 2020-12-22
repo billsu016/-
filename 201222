@@ -32,3 +32,20 @@ sns.pairplot(data=iris_all,diag_kind='kde', hue= 'target')
 plt.show()
 
 #26和30为两种可视化方法
+
+from sklearn import metrics
+
+## 利用accuracy（准确度）【预测正确的样本数目占总预测样本数目的比例】评估模型效果
+print('The accuracy of the Logistic Regression is:',metrics.accuracy_score(y_train,train_predict))
+print('The accuracy of the Logistic Regression is:',metrics.accuracy_score(y_test,test_predict))
+
+## 查看混淆矩阵 (预测值和真实值的各类情况统计矩阵)
+confusion_matrix_result = metrics.confusion_matrix(test_predict,y_test)
+print('The confusion matrix result:\n',confusion_matrix_result)
+
+# 利用热力图对于结果进行可视化
+plt.figure(figsize=(8, 6))
+sns.heatmap(confusion_matrix_result, annot=True, cmap='Blues')
+plt.xlabel('Predicted labels')
+plt.ylabel('True labels')
+plt.show()
