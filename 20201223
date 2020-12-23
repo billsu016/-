@@ -85,3 +85,20 @@ a.kick()
 # 我叫球A,该死的，谁踢我...
 b.kick()
 # 我叫球B,该死的，谁踢我...
+
+#下例中使用了__init__的方法，注意与上例的不同
+class Ball:
+    def __init__(self, name):
+        self.name = name
+
+    def kick(self):
+        print("我叫%s,该死的，谁踢我..." % self.name)
+
+
+a = Ball("球A")
+b = Ball("球B")
+c = Ball("球C")
+a.kick()
+# 我叫球A,该死的，谁踢我...
+b.kick()
+# 我叫球B,该死的，谁踢我...
