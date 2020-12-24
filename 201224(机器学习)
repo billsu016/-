@@ -1,0 +1,54 @@
+#模拟离散数据
+import random
+import numpy as np
+# 使用基于类目特征的朴素贝叶斯
+from sklearn.naive_bayes import CategoricalNB
+from sklearn.model_selection import train_test_split
+
+# 模拟数据
+rng = np.random.RandomState(1)
+# 随机生成600个100维的数据，每一维的特征都是[0, 4]之前的整数
+X = rng.randint(5, size=(600, 100))
+y = np.array([1, 2, 3, 4, 5, 6] * 100)
+data = np.c_[X, y]
+# X和y进行整体打散
+random.shuffle(data)
+X = data[:,:-1]
+y = data[:, -1]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+clf = CategoricalNB(alpha=1)#若alpha=0，则为极大似然估计
+clf.fit(X_train, y_train)
+acc = clf.score(X_test, y_test)
+print("Test Acc : %.3f" % acc)
+
+X = rng.randint(5, size=(1, 100))
+print(clf.predict_proba(x))
+print(clf.predict(x))
+
+#鸢尾花数据集
+import warnings
+warnings.filterwarnings('ignore')
+import numpy as np
+# 加载莺尾花数据集
+from sklearn import datasets
+# 导入高斯朴素贝叶斯分类器
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import train_test_split
+
+X, y = datasets.load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+# 使用高斯朴素贝叶斯进行计算
+clf = GaussianNB()#GaussianNB(priors=None),其中priors表示类的先验概率，如不指定，则自行根据数据计算先验概率。
+clf.fit(X_train, y_train)
+
+# 评估
+y_pred = clf.predict(X_test)
+acc = np.sum(y_test == y_pred) / X_test.shape[0]
+print("Test Acc : %.3f" % acc)
+
+# 预测
+y_proba = clf.predict_proba(X_test[:4])
+print(clf.predict(X_test[:4]))
+print("预计的概率值:", y_proba)
