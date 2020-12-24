@@ -1,0 +1,112 @@
+# 定义基本属性
+class people:
+    name = ''
+    age = 0
+    # 定义私有属性,私有属性在类外部无法直接进行访问
+    __weight = 0
+
+    # 定义构造方法
+
+    def __init__(self, n, a, w):
+        self.name = n
+        self.age = a
+        self.__weight = w
+
+    def speak(self):
+        print("%s 说: 我 %d 岁了，我有 %d 公斤" % (self.name, self.age, self.__weight))
+
+        
+# 单继承示例
+class student(people):
+    grade = ''
+
+    def __init__(self, n, a, w, g):
+        # 调用父类的构函
+        people.__init__(self, n, a, w)
+        self.grade = g
+
+    # 覆写父类的方法
+    def speak(self):
+        print("%s 说: 我 %d 岁了，我在读 %d 年级" % (self.name, self.age, self.grade))
+        
+        
+s = student('小马的程序人生', 10, 60,3)
+s.speak()
+# 小马的程序人生 说: 我 10 岁了，我在读 3 年级# 类定义
+
+#上例中s传入了student的类，但无法通过该类直接使用people中的私有属性__weight；若需引用，只能把people的类传入s。
+#猜测——类中的私有属性仅在该类中定义的函数中才具有传递效应，跨类便不具有传递效应。
+#如果上面的程序去掉：people.__init__(self, n, a, w)，则输出：说: 我 0 岁了，我在读 3 年级，因为子类的构造方法把父类的构造方法覆盖了（同名属性亦然）。
+
+
+#多重继承
+# 类定义
+class People:
+    # 定义基本属性
+    name = ''
+    age = 0
+    # 定义私有属性,私有属性在类外部无法直接进行访问
+    __weight = 0
+
+    # 定义构造方法
+    def __init__(self, n, a, w):
+        self.name = n
+        self.age = a
+        self.__weight = w
+
+    def speak(self):
+        print("%s 说: 我 %d 岁。" % (self.name, self.age))
+
+
+# 单继承示例
+class Student(People):
+    grade = ''
+
+    def __init__(self, n, a, w, g):
+        # 调用父类的构函
+        People.__init__(self, n, a, w)
+        self.grade = g
+
+    # 覆写父类的方法
+    def speak(self):
+        print("%s 说: 我 %d 岁了，我在读 %d 年级" % (self.name, self.age, self.grade))
+
+
+
+# 另一个类，多重继承之前的准备
+class Speaker:
+    topic = ''
+    name = ''
+
+    def __init__(self, n, t):
+        self.name = n
+        self.topic = t
+
+    def speak(self):
+        print("我叫 %s，我是一个演说家，我演讲的主题是 %s" % (self.name, self.topic))
+
+
+# 多重继承
+class Sample01(Speaker, Student):
+    a = ''
+
+    def __init__(self, n, a, w, g, t):
+        Student.__init__(self, n, a, w, g)
+        Speaker.__init__(self, n, t)
+
+# 方法名同，默认调用的是在括号中排前地父类的方法
+test = Sample01("Tim", 25, 80, 4, "Python")
+test.speak()  
+# 我叫 Tim，我是一个演说家，我演讲的主题是 Python
+
+class Sample02(Student, Speaker):
+    a = ''
+
+    def __init__(self, n, a, w, g, t):
+        Student.__init__(self, n, a, w, g)
+        Speaker.__init__(self, n, t)
+
+# 方法名同，默认调用的是在括号中排前地父类的方法
+test = Sample02("Tim", 25, 80, 4, "Python")
+test.speak()  
+# Tim 说: 我 25 岁了，我在读 4 年级
