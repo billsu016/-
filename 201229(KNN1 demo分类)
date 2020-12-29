@@ -29,7 +29,7 @@ for ind,k in enumerate(k_list):
                          np.arange(y_min, y_max, h))
     Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
     # 根据边界填充颜色
-    Z = Z.reshape(xx.shape)
+    Z = Z.reshape(xx.shape) # 此处Z位于enumerate()函数中，故Z.shape一共有6个（220，280）的坐标矩阵。
 
     plt.subplot(321+ind)  
     plt.pcolormesh(xx, yy, Z, cmap=cmap_light)
