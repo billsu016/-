@@ -1,0 +1,89 @@
+#内置函数
+
+#getattr(object, name[, default])用于返回一个对象属性值。
+
+class A(object):
+    bar = 1
+
+
+a = A()
+print(getattr(a, 'bar'))  # 1
+print(getattr(a, 'bar2', 3))  # 3
+print(getattr(a, 'bar2'))
+# AttributeError: 'A' object has no attribute 'bar2'
+print(type(getattr(a, 'bar')))#<class 'int'>,若getattr()返回的对象是类中的“属性”，则getattr()的类型与属性值一致（如整型、浮点型等），且可直接通过print()函数显示返回结果。
+
+class A(object):
+    def set(self, a, b):
+        x = a
+        a = b
+        b = x
+        print(a, b)
+
+
+a = A()
+c = getattr(a, 'set')#若getattr()返回的对象是类中的“方法”，则getattr()的类型为“方法”，且不能通过print（）函数显示返回结果，需将getattr()赋予一新的变量，利用该变量进行调用，调用时参数应为字符串型。
+c(a='1', b='2')  # 2 1
+
+#setattr(object, name, value)对应函数 getattr()，用于设置属性值，该属性不一定是存在的。
+class A(object):
+    bar = 1
+
+
+a = A()
+print(getattr(a, 'bar'))  # 1
+setattr(a, 'bar', 5)
+print(a.bar)  # 5
+setattr(a, "age", 28)
+print(a.age)  # 28
+
+#delattr(object, name)用于删除属性。
+class Coordinate:
+    x = 10
+    y = -5
+    z = 0
+
+
+point1 = Coordinate()
+
+print('x = ', point1.x)  # x =  10
+print('y = ', point1.y)  # y =  -5
+print('z = ', point1.z)  # z =  0
+
+delattr(Coordinate, 'z')
+
+print('--删除 z 属性后--')  # --删除 z 属性后--
+print('x = ', point1.x)  # x =  10
+print('y = ', point1.y)  # y =  -5
+
+# 触发错误
+print('z = ', point1.z)
+# AttributeError: 'Coordinate' object has no attribute 'z'
+
+
+I #class property([fget[, fset[, fdel[, doc]]]])用于在新式类中返回属性值。
+
+class C(object):
+    def __init__(self):
+        self.__x =  None
+
+    def getx(self):
+        return self.__x
+
+    def setx(self, value):
+        self.__x = value
+
+    def delx(self):
+        del self.__x
+
+    x = property(getx, setx, delx, "I'm the 'x' property.")
+    
+#如果 c 是 C 的实例化, c.x 将触发 getter,c.x = value 将触发 setter ， del c.x 触发 deleter。    
+cc = C()
+print(cc.x) # None
+print(type(cc.x)) # <class 'Nobetype'>
+cc.x=2
+print(cc.x) #2
+print(type(cc.x)) # <class 'int'>
+del cc.x 
+print(cc.x) # 'C' object has no attribute '_C__x'
