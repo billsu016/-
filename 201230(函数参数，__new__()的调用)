@@ -54,7 +54,7 @@ class B(A):
     def __new__(cls, *args, **kwargs):
         print("into B __new__")
         print(cls)
-        return super().__new__(cls, *args, **kwargs)
+        return super().__new__(cls, *args, **kwargs) # super() 函数是用于调用父类(超类)的一个方法。
 
 
 b = B(10)
@@ -100,3 +100,5 @@ b = B(10)
 # into A __new__
 # <class '__main__.A'>，此处无法进入A“类”的__init__，猜测是因为在运行B“类”的方法时，未对A“类”赋予参数，故无法满足进入A“类”的__init__的条件。
 
+# 若__new__没有正确返回当前类cls的实例，那__init__是不会被调用的，即使是父类的实例也不行，将没有__init__被调用。
+# 尝试输入b = B(A(10))
