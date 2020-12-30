@@ -1,0 +1,102 @@
+#函数参数
+
+#位置参数——def functionname(arg1)，arg1 - 位置参数 ，这些参数在调用函数 (call function) 时位置要固定。
+#默认参数——def functionname(arg1, arg2=v)，arg2 = v - 默认参数 = 默认值，调用函数时，默认参数的值如果没有传入，则被认为是默认值。（该参数在位置参数后面）
+#可变参数——def functionname(arg1, arg2=v, *args)，*args - 可变参数，可以是从零个到任意个，自动组装成元组；加了星号（*）的变量名会存放所有未命名的变量参数。
+#关键字参数——def functionname(arg1, arg2=v, *args, **kw)，**kw - 关键字参数，可以是从零个到任意个，自动组装成字典。
+#命名关键字参数——def functionname(arg1, arg2=v, args, *, nkw, *kw)，*, nkw - 命名关键字参数，用户想要输入的关键字参数，定义方式是在nkw 前面加个分隔符 *；如果要限制关键字参数的名字，就可以用「命名关键字参数」；使用命名关键字参数时，要特别注意不能缺少参数名。
+
+#example 1——（位置参数，可变参数，关键字参数）
+def printinfo(arg1, *args, **kwargs):
+    print(arg1)
+    print(args)
+    print(kwargs)
+
+printinfo(70, 60, 50, a=1, b=2)
+#70
+#(60 ,50)
+#{'a':1, 'b':2}
+
+#example 2——（位置参数，命名关键字参数，关键字参数）
+def printinfo(arg1, *, nkw, **kwargs):
+    print(arg1)
+    print(nkw)
+    print(kwargs)
+
+
+printinfo(70, nkw=10, a=1, b=2)
+# 70
+# 10
+# {'a': 1, 'b': 2}
+
+#魔法方法
+#__new__(cls[, ...]) 在一个对象实例化的时候所调用的第一个方法，在调用__init__初始化前，先调用__new__。
+    #__new__至少要有一个参数cls，代表要实例化的类，此参数在实例化时由 Python 解释器自动提供，后面的参数直接传递给__init__。
+    #__new__对当前类进行了实例化，并将实例返回，传给__init__的self。但是，执行了__new__，并不一定会进入__init__，只有__new__返回了当前类cls的实例，当前类的__init__才会进入。
+    
+#example1
+class A(object):
+    def __init__(self, value):
+        print("into A __init__")
+        self.value = value
+
+    def __new__(cls, *args, **kwargs):
+        print("into A __new__")
+        print(cls)
+        return object.__new__(cls)
+
+
+class B(A):
+    def __init__(self, value):
+        print("into B __init__")
+        self.value = value
+
+    def __new__(cls, *args, **kwargs):
+        print("into B __new__")
+        print(cls)
+        return super().__new__(cls, *args, **kwargs)
+
+
+b = B(10)
+
+# 结果：
+# into B __new__
+# <class '__main__.B'>
+# into A __new__
+# <class '__main__.B'>
+# into B __init__
+#注意B(10)中的参数“10”，通过B“类”__new__()中的可变参数*args传递给了同类__init__()中的位置参数 value。
+
+
+#example2
+class A(object):
+    def __init__(self, value):
+        print("into A __init__")
+        self.value = value
+
+    def __new__(cls, *args, **kwargs):
+        print("into A __new__")
+        print(cls)
+        return object.__new__(cls)
+
+
+class B(A):
+    def __init__(self, value):
+        print("into B __init__")
+        self.value = value
+
+    def __new__(cls, *args, **kwargs):
+        print("into B __new__")
+        print(cls)
+        return super().__new__(A, *args, **kwargs)  # 改动了cls变为A
+
+
+b = B(10)
+
+
+# 结果：
+# into B __new__
+# <class '__main__.B'>
+# into A __new__
+# <class '__main__.A'>，此处无法进入A“类”的__init__，猜测是因为在运行B“类”的方法时，未对A“类”赋予参数，故无法满足进入A“类”的__init__的条件。
+
