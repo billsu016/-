@@ -1,0 +1,68 @@
+# kNN分类
+
+# example
+import numpy as np
+# 加载莺尾花数据集
+from sklearn import datasets
+# 导入KNN分类器
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+
+# 导入莺尾花数据集
+iris = datasets.load_iris()
+
+X = iris.data
+y = iris.target
+# 得到训练集合和验证集合, 8: 2
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# 训练模型
+clf = KNeighborsClassifier(n_neighbors=5, p=2, metric="minkowski")
+clf.fit(X_train, y_train)
+
+# 预测
+X_pred = clf.predict(X_test)
+acc = sum(X_pred == y_test) / X_pred.shape[0]
+print("预测的准确率ACC: %.3f" % acc)
+
+#kNN回归
+
+#example
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.neighbors import KNeighborsRegressor
+
+np.random.seed(0)
+# 随机生成40个(0, 1)之前的数，乘以5，再进行升序
+X = np.sort(6 * np.random.rand(40, 1), axis=0)
+# 创建[0, 5]之间的500个数的等差数列, 作为测试数据
+T = np.linspace(0, 6, 600)[:, np.newaxis] # [:, np.newaxis]表示增加列的维度，[np.newaxis, :]表示增加行的维度，如c = np.array([1, 2, 3])的形状为(3, )，则c.[np.newaxis, :]的形状为(1,3)。
+# 使用sin函数得到y值，并拉伸到一维
+y = np.sin(X).ravel()
+# Add noise to targets[y值增加噪声]
+y[::5] += 1 * (0.5 - np.random.rand(8))
+y = y[:,np.newaxis]
+print(X.shape) # (40, 1)
+print(y.shape) # (40, 1)
+
+# Fit regression model
+# 设置多个k近邻进行比较
+n_neighbors = [1, 3, 5, 8, 10, 40]
+# 设置图片大小
+plt.figure(figsize=(10,20))
+for i, k in enumerate(n_neighbors):
+    # 默认使用加权平均进行计算predictor
+    clf = KNeighborsRegressor(n_neighbors=k, p=2, metric="minkowski")
+    # 训练
+    clf.fit(X, y)
+    # 预测
+    y_ = clf.predict(T)
+    plt.subplot(6, 1, i + 1)
+    plt.scatter(X, y, color='red', label='data')
+    plt.plot(T, y_, color='navy', label='prediction')
+    plt.axis('tight')
+    plt.legend()
+    plt.title("KNeighborsRegressor (k = %i)" % (k))
+
+plt.tight_layout()
+plt.show()
