@@ -1,0 +1,51 @@
+# 绘制一个折线图
+import matplotlib.pyplot as plt
+import numpy as np
+
+fig, ax = plt.subplots() # 
+ax.plot([1, 2, 3, 4], [5, 6, 7, 8])
+
+plt.plot([1, 2, 3, 4], [2, 3, 4, 5])
+plt.show()  # 上述两种方法均能绘制图像
+
+# Figure的组成：
+# 1、Figure:顶层集；
+# 2、Axes:子图，一个Figure包含一个或多个子图；
+# 3、Axis：处理所有和坐标轴，网格有关的元素；
+# 4、Tick：处理所有和刻度有关的元素。
+
+
+fig = plt.figure()  # an empty figure with no Axes
+fig, ax = plt.subplots()  # a figure with a single Axes
+fig, axs = plt.subplots(2, 2)  # a figure with a 2x2 grid of Axes
+
+# 有两种绘图方式：1、显式创建figure和Axes，并在其上绘图，该方法称OO模式（the object-oriented style）;
+# 2、利用pyplot自动创建figure和Axes，并绘图。
+
+# OO模式绘图
+x = np.linspace(0, 2, 100)
+
+fig, ax = plt.subplots()
+
+ax.plot(x, x, label='linear')
+ax.plot(x, x**2, label='quadratic')
+ax.plot(x, x**3, label='cubic')
+ax.set_xlabel('x label')
+ax.set_ylabel('y label')
+ax.set_title('the first way of plotting')
+ax.legend()
+
+plt.show()
+
+# 使用pyplot自动绘图
+x = np.linspace(0, 2, 100)
+
+plt.plot(x, x, label='linear')
+plt.plot(x, x**2, label='quadratic')
+plt.plot(x, x**3, label='cubic')
+plt.xlabel('x label') # 设置坐标名和图标题的语句与OO模式不同
+plt.ylabel('y label')
+plt.title('the second way of plotting')
+plt.legend()
+
+plt.show()
